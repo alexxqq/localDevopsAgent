@@ -1,15 +1,13 @@
-# chatbot.py
 from langchain_core.messages import HumanMessage
-from agent.graph import build_graph
 import asyncio
+
+from agent.graph import build_graph
 
 app = build_graph()
 state = {
     "messages": [],
     "agent_outcome": None,
     "tool_output": None,
-    "validation_passed": None,
-    "pending_command": None
 }
 
 async def get_chat_response(user_input: str):

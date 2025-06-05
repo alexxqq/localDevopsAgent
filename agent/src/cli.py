@@ -1,11 +1,8 @@
 from langchain_core.messages import HumanMessage
 import asyncio
 
-# import logging
-
 from agent.graph import build_graph
 
-# logging.basicConfig(level=logging.DEBUG)
 
 def main():
     print("Local DevOps Agent CLI")
@@ -14,8 +11,6 @@ def main():
         "messages": [],
         "agent_outcome": None,
         "tool_output": None,
-        "validation_passed": None,
-        "pending_command": None 
     }
 
     async def run_loop():

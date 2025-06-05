@@ -1,10 +1,16 @@
 from langchain_core.tools import tool
+
 import psutil
 import shutil
 import platform
 import socket
 import subprocess
 import os
+
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
 @tool
 def execute_bash_command(command: str, timeout: int = 60) -> str:
     """
@@ -21,7 +27,7 @@ def execute_bash_command(command: str, timeout: int = 60) -> str:
         str: The stdout and stderr of the command, or an error message if it fails.
     """
     try:
-
+        logger.info(f'Running command: {command}')
         result = subprocess.run(
             command,
             shell=True,
@@ -34,16 +40,13 @@ def execute_bash_command(command: str, timeout: int = 60) -> str:
         return output
     except subprocess.CalledProcessError as e:
         error_output = f"Command failed with exit code {e.returncode}.\nSTDOUT:\n{e.stdout}\nSTDERR:\n{e.stderr}"
-        print(f"Bash command failed. Error:\n{error_output[:200]}...")
+        logger.info(f"Bash command failed. Error:\n{error_output[:200]}...")
         return f"Error executing command: {error_output}"
     except subprocess.TimeoutExpired as e:
         error_output = f"Command timed out after {timeout} seconds. STDOUT:\n{e.stdout}\nSTDERR:\n{e.stderr}"
-        print(f"Bash command timed out. Error:\n{error_output[:200]}...")
+        logger.info(f"Bash command timed out. Error:\n{error_output[:200]}...")
         return f"Error: Command timed out: {error_output}"
     except Exception as e:
         error_output = f"An unexpected error occurred: {e}"
-        print(f"Bash command unexpected error. Error:\n{error_output[:200]}...")
+        logger.info(f"Bash command unexpected error. Error:\n{error_output[:200]}...")
         return f"Error: {error_output}"
-
-
-
